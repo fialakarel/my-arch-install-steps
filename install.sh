@@ -1,18 +1,20 @@
 #!/bin/bash
 
-set -veuofo pipefail
+set -veufo pipefail
 
+# For testing purposes only
 drive="vda"
 part_boot="1"
 part_root="2"
 bootloader="grub"
+encrypted="false"
 
+# Real value on physical HW
 #drive="nvme0n1"
 #part_boot="p1"
 #part_root="p2"
 #bootloader="systemd"
-
-encrypted="false"
+#encrypted="true"
 
 username="kfiala"
 
@@ -60,9 +62,6 @@ pacstrap -K /mnt base linux linux-firmware btrfs-progs dosfstools \
             xss-lock lm_sensors pipewire wireplumber \
             pipewire-audio pipewire-alsa pipewire-pulse
 
-# excluded: qemu-full virt-manager
-# missing: google-chrome autofs
-
 genfstab -U /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt /bin/bash -c "
@@ -78,12 +77,12 @@ locale-gen
 echo <<EOF >/etc/locale.conf
 LANG=en_US.UTF-8
 LANGUAGE=
-LC_CTYPE="en_US.UTF-8"
+LC_CTYPE=en_GB.UTF-8
 LC_NUMERIC=en_GB.UTF-8
 LC_TIME=en_GB.UTF-8
-LC_COLLATE="en_US.UTF-8"
+LC_COLLATE=en_GB.UTF-8
 LC_MONETARY=en_GB.UTF-8
-LC_MESSAGES="en_US.UTF-8"
+LC_MESSAGES=en_GB.UTF-8
 LC_PAPER=en_GB.UTF-8
 LC_NAME=en_GB.UTF-8
 LC_ADDRESS=en_GB.UTF-8
@@ -95,7 +94,7 @@ EOF
 
 echo 'KEYMAP=cz-qwertz' >/etc/vconsole.conf
 
-echo 'archsus' >/etc/hostname
+echo 'p5' >/etc/hostname
 "
 
 if [ "$encrypted" = "true" ]; then
@@ -173,6 +172,14 @@ fs.inotify.max_user_instances = 256
 
 # allow sysrq
 kernel.sysrq = 1
+
+### Tweak writing speed
+
+# 16*1024*1024 -> 16MB backgrounded
+#vm.dirty_background_bytes = 16777216
+
+# 48*1024*1024 -> 48MB write and wait
+#vm.dirty_bytes = 50331648
 EOF
 
 cat <<EOF >>/etc/systemd/logind.conf
@@ -192,6 +199,8 @@ sensors-detect --auto
 "
 
 # TODO
+# * fix the issues during the install process
+# * symlink vi to vim
 
 # Backlog
 # * session lock -- xss-lock -- i3lock -n -i background_image.png &
