@@ -10,6 +10,9 @@ sudo systemctl enable systemd-resolved.service
 sudo systemctl start iwd.service
 sudo systemctl enable iwd.service
 
+# Resolve possible DNS issues, eg. 1password gpg key
+sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
 # Get my configuration
 git clone https://github.com/fialakarel/dotfiles ~/.dotfiles
 bash ~/.dotfiles/delete-local-config.sh
@@ -43,41 +46,47 @@ makepkg -si
 # Upgrade system
 paru -Syu
 
-# Arch packages
-paru -S yubikey-manager yubikey-manager-qt xfreerdp freerdp stress-ng \
-        postgresql-libs rawtherapee lazygit fzf mutt notification-daemon \
-        libnotify notification-daemon qemu-hw-usb-host libcryptui nextcloud-client \
-        obsidian cifs-utils kitty ueberzug tree pup htmlq inetutils
+# Install Arch and AUR packages
+paru -S 1password 7zip adwaita-qt5-git adwaita-qt6-git alsa-utils android-tools ansible \
+        arandr argocd attr audacity autorandr aws-cli azure-cli bat bc bleachbit \
+        bridge-utils brotli btrfs-progs cifs-utils cups ddrescue detox docker \
+        dosfstools epr-git fakeroot feh ffmpeg findutils freerdp fwupd fwupd-efi fzf \
+        gimp git git-crypt github-cli git-lfs gnu-netcat gnupg google-chrome gparted \
+        gpicview grep gyroflow gzip hdparm helm htmlq htop i3lock i3status i3-wm i7z \
+        imagemagick inetutils insync intel-ucode iperf iproute2 iptables iputils iw iwd \
+        j4-dmenu-desktop jira-cli-bin jq jsonnet jsonnet-bundler-bin k9s keepass \
+        kexec-tools keyutils kitty kubectl lazygit lens-bin libcryptui libnotify \
+        libreoffice-fresh lightdm lm_sensors localsend-bin minicom mosh mpv mutt \
+        net-tools nextcloud-client nfs-utils nmap notification-daemon ntfs-3g ntp \
+        obsidian obs-studio openscad openssh openvpn parted pasystray pavucontrol \
+        podman postgresql-libs prusa-slicer-rc-bin pup pv pyenv python python-jq \
+        python-poetry qemu-base qemu-common qemu-hw-usb-host qemu-img qemu-system-x86 \
+        qemu-system-x86-firmware qflipper-bin ranger rawtherapee scrcpy screen scrot \
+        sed simplescreenrecorder smartmontools smbclient sqlite storageexplorer \
+        stress-ng tailscale tanka-bin terraform testdisk tlp tlpui tree \
+        udiskie ueberzug unrar unzip upower vim virt-install \
+        virt-manager virt-viewer visual-studio-code-bin wget when-changed-git which \
+        whois winbox wol x11vnc xclip xdg-utils xdotool xsel xss-lock xz yt-dlp \
+        yubico-c yubico-c-client yubikey-manager yubikey-manager-qt \
+        yubikey-personalization zathura zathura-pdf-poppler zip zsh \
+        lightdm-gtk-greeter sof-firmware adwaita-dark
 
-# AUR packages
-paru -S 1password adwaita-qt5-git adwaita-qt6-git azure-cli-bin epr-git \
-        google-chrome gyroflow insync jira-cli-bin jsonnet jsonnet-bundler-bin \
-        lens-bin localsend-bin prusa-slicer-rc-bin qflipper-bin simplescreenrecorder \
-        storageexplorer tanka-bin tlpui ttf-ms-fonts ttf-vista-fonts \
-        visual-studio-code-bin winbox xerox-phaser-6020 xsuspender-git
+# Fonts that I am used to
+paru -S adobe-source-code-pro-fonts cantarell-fonts fontconfig gnu-free-fonts gsfonts \
+        libfontenc libxfont2 noto-fonts noto-fonts-emoji otf-font-awesome \
+        python-fonttools terminus-font ttf-ms-fonts ttf-nerd-fonts-symbols \
+        ttf-nerd-fonts-symbols-common ttf-ubuntu-font-family ttf-vista-fonts \
+        xorg-font-util xorg-fonts-100dpi xorg-fonts-75dpi xorg-fonts-alias-100dpi \
+        xorg-fonts-alias-75dpi xorg-fonts-encodings xorg-mkfontscale sdl2_ttf \
+        ttf-bitstream-vera ttf-croscore ttf-dejavu ttf-liberation ttf-ms-fonts \
+        ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-common ttf-roboto \
+        ttf-ubuntu-font-family ttf-vista-fonts
 
-# Install all my packages -> contains duplicities
-# TODO: consider rework this
-paru -S 7zip alsa-utils android-tools ansible arandr argocd attr audacity autorandr \
-        aws-cli azure-cli-bin bat bc bleachbit bridge-utils brotli btrfs-progs \
-        cifs-utils cups ddrescue docker dosfstools epr-git exfat-utils fakeroot feh \
-        ffmpeg findutils freerdp fwupd fwupd-efi fzf gimp git git-crypt git-lfs \
-        github-cli gnu-netcat gnupg google-chrome gparted gpicview grep gyroflow gzip \
-        hdparm helm htmlq htop i3-wm i3lock i3status i7z imagemagick insync intel-ucode \
-        iperf iproute2 iptables iputils iw iwd j4-dmenu-desktop jira-cli-bin jq jsonnet \
-        jsonnet-bundler-bin k9s keepass kexec-tools keyutils kitty kubectl lazygit \
-        lens-bin lm_sensors localsend-bin minicom mosh mpv net-tools nextcloud-client \
-        nfs-utils nmap notification-daemon ntfs-3g ntp obs-studio obsidian openscad \
-        openssh openvpn parted pasystray pavucontrol postgresql-libs prusa-slicer-rc-bin \
-        pv pyenv python qemu-base qemu-common qemu-hw-usb-host qemu-img qemu-system-x86 \
-        qemu-system-x86-firmware qflipper-bin ranger rawtherapee scrcpy screen scrot sed \
-        simplescreenrecorder simplescreenrecorder-debug smartmontools smbclient sqlite \
-        storageexplorer stress-ng tailscale tanka-bin terraform testdisk udiskie unrar \
-        unzip upower vim virt-install virt-manager virt-viewer visual-studio-code-bin \
-        wget which whois winbox wol x11vnc xclip xdg-utils xdotool xsel xss-lock \
-        xsuspender-git xz yt-dlp yubico-c yubico-c-client yubikey-manager \
-        yubikey-manager-qt yubikey-personalization zathura zathura-pdf-poppler zip zsh \
-        podman lightdm
+# rescan fonts
+fc-cache --force
+
+# gyroflow -> use official app image
+# xsuspender-git -> not working
 
 # Allow lightdm
 sudo systemctl enable lightdm.service
@@ -88,9 +97,31 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 # Fix cursor size
-cat >~/.Xresources <<EOF
+cat <<EOF >~/.Xresources 
+Xcursor.theme: Adwaita
 Xcursor.size:  16
 EOF
 
-# pip
-pip install yq colorama when-changed
+cat <<EOF >~/.xprofile 
+export SSH_AUTH_SOCK="\$XDG_RUNTIME_DIR/ssh-agent.socket"
+EOF
+
+sudo sensors-detect --auto
+
+# Layout in tty
+cat <<EOF | sudo tee >/etc/vconsole.conf
+KEYMAP=cz-qwertz
+XKBLAYOUT=cz
+FONT=Lat2-Terminus16
+FONT_MAP=8859-2
+EOF
+
+# Layout in xorg
+sudo localectl set-x11-keymap cz
+
+# Dark theme
+cat <<EOF | sudo tee -a >/etc/profile
+export GTK_THEME=Adwaita:dark
+export GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
+export QT_STYLE_OVERRIDE=adwaita-dark
+EOF

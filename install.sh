@@ -49,18 +49,16 @@ mount --mkdir /dev/${drive}${part_boot} /mnt/boot
 
 pacstrap -K /mnt base linux linux-firmware btrfs-progs dosfstools \
             exfatprogs e2fsprogs ntfs-3g iwd vim man-db man-pages \
-            zsh i3-wm i3status i3lock j4-dmenu-desktop terminator \
-            htop docker ffmpeg kubectl screen git wget arandr bc \
-            cifs-utils detox feh i7z curl mpv ntp openvpn pv ranger \
-            smartmontools udiskie unrar xdotool xorg zathura unzip \
-            keepass upower zip git-lfs scrot git-crypt xclip gimp git \
-            imagemagick iperf libreoffice-fresh nmap ranger \
-            jq mosh gparted virt-viewer xsel xautolock \
-            autorandr ansible python-poetry pyenv helm \
-            terraform tlp gnu-netcat xf86-video-intel mesa \
+            zsh i3-wm i3status i3lock j4-dmenu-desktop dmenu \
+            htop git wget arandr bc cifs-utils curl ntp pv ranger \
+            smartmontools udiskie unrar xdotool xorg unzip \
+            upower zip git-lfs scrot git-crypt xclip git ranger \
+            gparted virt-viewer xsel xautolock \
+            gnu-netcat xf86-video-intel mesa \
             vulkan-intel xorg-xinit sudo intel-ucode \
             xss-lock lm_sensors pipewire wireplumber \
             pipewire-audio pipewire-alsa pipewire-pulse
+
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -200,12 +198,10 @@ EOF
 "
 
 arch-chroot /mnt /bin/bash -c "
-sensors-detect --auto
+systemctl enable systemd-networkd.service
+systemctl enable systemd-resolved.service
+systemctl enable iwd.service
 "
-
-# TODO
-# * fix the issues during the install process
-# * symlink vi to vim
 
 # Backlog
 # * session lock -- xss-lock -- i3lock -n -i background_image.png &
