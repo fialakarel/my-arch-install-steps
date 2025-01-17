@@ -23,8 +23,6 @@ loadkeys cz-qwertz
 
 timedatectl
 
-fdisk /dev/${drive}
-
 # p -- print
 # n -- create, p -- primary
 # +2G
@@ -33,6 +31,8 @@ fdisk /dev/${drive}
 
 # p -- see changes
 # w -- write changes
+
+fdisk /dev/${drive}
 
 if [ "$encrypted" = "true" ]; then
     cryptsetup -y -v luksFormat /dev/${drive}${part_root}
@@ -121,9 +121,14 @@ fi
 if [ "$bootloader" = "systemd" ]; then
     arch-chroot /mnt /bin/bash -c "
     bootctl install
-    sed -i 's/initrd/initrd \/intel-ucode.img\ninitrd/g' /boot/loader/entries/entry.conf
+    cat <<EOF >/boot/loader/entries/arch.conf
+title Arch Linux
+linux /vmlinuz-linux
+initrd /intel-ucode.img
+initrd /initramfs-linux.img
+options cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p2):rootfs:allow-discards root=/dev/mapper/rootfs rw
+EOF
     "
-    # there will be some additional configuration required
 fi
 
 arch-chroot /mnt /bin/bash -c "
