@@ -56,7 +56,7 @@ pacstrap -K /mnt base linux linux-firmware btrfs-progs dosfstools \
             keepass upower zip git-lfs scrot git-crypt xclip gimp git \
             imagemagick iperf libreoffice-fresh nmap ranger \
             jq mosh gparted virt-viewer xsel xautolock \
-            autorandr ansible youtube-dl python-poetry pyenv helm \
+            autorandr ansible python-poetry pyenv helm \
             terraform tlp gnu-netcat xf86-video-intel mesa \
             vulkan-intel xorg-xinit sudo intel-ucode \
             xss-lock lm_sensors pipewire wireplumber \

@@ -77,8 +77,10 @@ paru -S 7zip alsa-utils android-tools ansible arandr argocd attr audacity autora
         wget which whois winbox wol x11vnc xclip xdg-utils xdotool xsel xss-lock \
         xsuspender-git xz yt-dlp yubico-c yubico-c-client yubikey-manager \
         yubikey-manager-qt yubikey-personalization zathura zathura-pdf-poppler zip zsh \
-        podman
+        podman lightdm
 
+# Allow lightdm
+sudo systemctl enable lightdm.service
 
 # ZSH
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -89,3 +91,6 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 cat >~/.Xresources <<EOF
 Xcursor.size:  16
 EOF
+
+# pip
+pip install yq colorama when-changed
