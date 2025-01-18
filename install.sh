@@ -57,7 +57,8 @@ pacstrap -K /mnt base linux linux-firmware btrfs-progs dosfstools \
             gnu-netcat xf86-video-intel mesa \
             vulkan-intel xorg-xinit sudo intel-ucode \
             xss-lock lm_sensors pipewire wireplumber \
-            pipewire-audio pipewire-alsa pipewire-pulse
+            pipewire-audio pipewire-alsa pipewire-pulse \
+            docker
 
 
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -201,6 +202,10 @@ arch-chroot /mnt /bin/bash -c "
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 systemctl enable iwd.service
+"
+
+arch-chroot /mnt /bin/bash -c "
+curl https://raw.githubusercontent.com/fialakarel/my-arch-install-steps/refs/heads/main/post-install.sh >/home/${username}/post-install.sh
 "
 
 # Backlog
