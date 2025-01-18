@@ -31,6 +31,12 @@ mkdir ~/Downloads
 mkdir -p ~/git/github.com
 mkdir -p ~/git/gitlab.com
 
+# Remove debug packages from makepkg
+cat <<EOF >~/.makepkg.conf
+# Remove debug packages
+OPTIONS=(strip docs !libtool !staticlibs emptydirs zipman purge !debug lto)
+EOF
+
 # Configure vim
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set +e
@@ -52,7 +58,7 @@ paru -S 1password 7zip adwaita-qt5-git adwaita-qt6-git alsa-utils android-tools 
         bridge-utils brotli btrfs-progs cifs-utils cups ddrescue detox docker \
         dosfstools epr-git fakeroot feh ffmpeg findutils freerdp fwupd fwupd-efi fzf \
         gimp git git-crypt github-cli git-lfs gnu-netcat gnupg google-chrome gparted \
-        gpicview grep gyroflow gzip hdparm helm htmlq htop i3lock i3status i3-wm i7z \
+        gpicview grep gzip hdparm helm htmlq htop i3lock i3status i3-wm i7z \
         imagemagick inetutils insync intel-ucode iperf iproute2 iptables iputils iw iwd \
         j4-dmenu-desktop jira-cli-bin jq jsonnet jsonnet-bundler-bin k9s keepass \
         kexec-tools keyutils kitty kubectl lazygit lens-bin libcryptui libnotify \
@@ -109,19 +115,19 @@ EOF
 sudo sensors-detect --auto
 
 # Layout in tty
-cat <<EOF | sudo tee >/etc/vconsole.conf
+sudo bash -c "cat <<EOF >/etc/vconsole.conf
 KEYMAP=cz-qwertz
 XKBLAYOUT=cz
 FONT=Lat2-Terminus16
 FONT_MAP=8859-2
-EOF
+EOF"
 
 # Layout in xorg
 sudo localectl set-x11-keymap cz
 
 # Dark theme
-cat <<EOF | sudo tee -a >/etc/profile
+sudo bash -c "cat <<EOF >>/etc/profile
 export GTK_THEME=Adwaita:dark
 export GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
 export QT_STYLE_OVERRIDE=adwaita-dark
-EOF
+EOF"
