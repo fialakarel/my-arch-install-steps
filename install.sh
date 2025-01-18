@@ -205,7 +205,8 @@ systemctl enable iwd.service
 "
 
 arch-chroot /mnt /bin/bash -c "
-curl https://raw.githubusercontent.com/fialakarel/my-arch-install-steps/refs/heads/main/post-install.sh >/home/${username}/post-install.sh
+curl https://raw.githubusercontent.com/fialakarel/my-arch-install-steps/refs/heads/main/post-install.sh >/opt/post-install.sh
+curl https://raw.githubusercontent.com/fialakarel/my-arch-install-steps/refs/heads/main/post-install-home-migration.sh >/opt/post-install-home-migration.sh
 "
 
 # Backlog
